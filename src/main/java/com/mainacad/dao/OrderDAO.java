@@ -102,8 +102,6 @@ public class OrderDAO {
         return orders;
     }
 
-
-
     public static void delete(Integer id){
         String statement = "DELETE FROM orders WHERE id=?";
 
@@ -129,4 +127,17 @@ public class OrderDAO {
 
         return null;
     }
+
+    public static Integer getSumOfAllOrdersByUserIdAndPeriod(Integer userId, Long from, Long to){
+        String sql = "SELECT SUM(i.price*o.amount)FROM items i " +
+                "JOIN orders o ON o.item_id = i.id " +
+                "JOIN carts c ON o.cart_id = c.id " +
+                "WHERE c.user_id=? AND " +
+                "c.creation_time>? AND " +
+                "c.creation_time<? AND " +
+                "c.closed=true";
+
+        return null;
+    }
+
 }

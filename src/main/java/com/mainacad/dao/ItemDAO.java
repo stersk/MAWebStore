@@ -4,8 +4,11 @@ import com.mainacad.model.Item;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class ItemDAO {
+    private static Logger logger = Logger.getLogger(OrderDAO.class.getName());
+
     public static Item create(Item item) {
         String statement = "INSERT INTO items(item_code, name, price)" +
                 "VALUES(?,?,?)";
@@ -31,7 +34,7 @@ public class ItemDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
 
         return null;
@@ -53,7 +56,7 @@ public class ItemDAO {
             return item;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
         return null;
     }
@@ -75,7 +78,7 @@ public class ItemDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
         return null;
     }
@@ -97,7 +100,7 @@ public class ItemDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
 
         return items;
@@ -121,7 +124,7 @@ public class ItemDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
 
         return items;
@@ -142,7 +145,7 @@ public class ItemDAO {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
 
         return items;
@@ -158,7 +161,7 @@ public class ItemDAO {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
     }
 
@@ -172,17 +175,4 @@ public class ItemDAO {
 
         return item;
     }
-
-    public static Integer getSumOfAllOrdersByUserIdAndPeriod(Integer userId, Long from, Long to){
-        String sql = "SELECT SUM(i.price*o.amount)FROM items i " +
-                "JOIN orders o ON o.item_id = i.id " +
-                "JOIN carts c ON o.cart_id = c.id " +
-                "WHERE c.user_id=? AND " +
-                "c.creation_time>? AND " +
-                "c.creation_time<? AND " +
-                "c.closed=true";
-
-        return null;
-    }
-
 }
