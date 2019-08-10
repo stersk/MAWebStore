@@ -1,10 +1,13 @@
 package com.mainacad.dao;
 
 import com.mainacad.model.Item;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +28,7 @@ class ItemDAOTest {
   void tearDown() {
     for (Item item: items) {
       if (item.getId() != null) {
-        ItemDAO.delete(item);
+        ItemDAO.delete(item.getId());
       }
     }
 
@@ -77,13 +80,7 @@ class ItemDAOTest {
     List<Item> checkedItems = ItemDAO.findByItemCode(TEST_ITEM_CODE);
     assertNotNull(checkedItems);
 
-    Item checkedItem = null;
-    for (int i = 0; i < checkedItems.size(); i++) {
-      if (checkedItems.get(i).getId() == createdItem.getId()) {
-        checkedItem = checkedItems.get(i);
-      }
-    }
-
+    Item checkedItem = findItemInCollection(checkedItems, createdItem);
     assertNotNull(checkedItem, "Item not found by code");
   }
 
@@ -94,25 +91,13 @@ class ItemDAOTest {
     List<Item> checkedItems = ItemDAO.findByItemPriceBetween(createdItem.getPrice() - 100, createdItem.getPrice() + 100);
     assertNotNull(checkedItems);
 
-    Item checkedItem = null;
-    for (int i = 0; i < checkedItems.size(); i++) {
-      if (checkedItems.get(i).getId() == createdItem.getId()) {
-        checkedItem = checkedItems.get(i);
-      }
-    }
-
+    Item checkedItem = findItemInCollection(checkedItems, createdItem);
     assertNotNull(checkedItem, "Item not found by price, but should");
 
     checkedItems = ItemDAO.findByItemPriceBetween(createdItem.getPrice() + 100, createdItem.getPrice() + 200);
     assertNotNull(checkedItem);
 
-    checkedItem = null;
-    for (int i = 0; i < checkedItems.size(); i++) {
-      if (checkedItems.get(i).getId() == createdItem.getId()) {
-        checkedItem = checkedItems.get(i);
-      }
-    }
-
+    checkedItem = findItemInCollection(checkedItems, createdItem);
     assertNull(checkedItem, "Item found by price, but should not");
   }
 
@@ -130,9 +115,17 @@ class ItemDAOTest {
   @Test
   void testDelete() {
     Item checkedItem = items.get(0);
-    ItemDAO.delete(checkedItem);
+    ItemDAO.delete(checkedItem.getId());
 
     Item deletedItem = ItemDAO.findById(checkedItem.getId());
     assertNull(deletedItem);
+  }
+
+  private Item findItemInCollection(List<Item> list, Item item){
+    Optional<Item> optionalItem = list.stream()
+                          .filter(element -> element.getId().equals(item.getId()))
+                          .findAny();
+
+    return optionalItem.orElse(null);
   }
 }

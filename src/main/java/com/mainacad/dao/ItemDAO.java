@@ -151,13 +151,13 @@ public class ItemDAO {
         return items;
     }
 
-    public static void delete(Item item){
+    public static void delete(Integer itemId){
         String statement = "DELETE FROM items WHERE id=?";
 
         try (Connection connection = ConnectionToDB.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
 
-            preparedStatement.setInt(1, item.getId());
+            preparedStatement.setInt(1, itemId);
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {

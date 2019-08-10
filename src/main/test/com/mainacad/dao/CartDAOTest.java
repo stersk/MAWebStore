@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -87,15 +88,7 @@ class CartDAOTest {
     List<Cart> checkedCartList = CartDAO.findByUser(cart.getUserId());
     assertNotNull(checkedCartList, "findByUser method return null object");
 
-    Cart cartForCheck = null;
-    for (Cart cartFromCollection: checkedCartList) {
-      assertEquals(cart.getUserId(), cartFromCollection.getUserId());
-
-      if (cartFromCollection.getId() == cart.getId()) {
-
-        cartForCheck = cartFromCollection;
-      }
-    }
+    Cart cartForCheck = findCartInCollection(checkedCartList, cart);
     assertNotNull(cartForCheck, "Test cart not found, but it should");
   }
 
@@ -119,5 +112,13 @@ class CartDAOTest {
 
     Cart checkedCart = CartDAO.findById(cart.getId());
     assertNull(checkedCart, "Cart not deleted from DB");
+  }
+
+  private Cart findCartInCollection(List<Cart> list, Cart cart){
+    Optional<Cart> optionalCart = list.stream()
+            .filter(element -> element.getId().equals(cart.getId()))
+            .findAny();
+
+    return optionalCart.orElse(null);
   }
 }

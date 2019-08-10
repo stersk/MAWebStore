@@ -28,6 +28,6 @@ public class OrderService {
     }
 
     public List<Order> findClosedOrdersByUserAndPeriod(User user, Long from, Long to){
-        return OrderDAO.findClosedOrdersByUserAndPeriod(user.getId(), from, to);
+        return OrderDAO.findClosedOrdersByUserIdAndPeriod(user.getId(), from, to);
     }
 }
