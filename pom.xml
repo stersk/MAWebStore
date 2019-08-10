@@ -20,6 +20,7 @@
     <lombok.version>1.18.8</lombok.version>
     <postgresql.jdbc.version>42.2.6</postgresql.jdbc.version>
     <servlet.version>4.0.1</servlet.version>
+    <commons-dbcp.version>1.4</commons-dbcp.version>
   </properties>
 
   <dependencies>
@@ -54,13 +55,20 @@
       <version>${postgresql.jdbc.version}</version>
     </dependency>
 
-<!--      WEB-API-->
+    <!--      WEB-API-->
       <dependency>
           <groupId>javax.servlet</groupId>
           <artifactId>javax.servlet-api</artifactId>
           <version>${servlet.version}</version>
           <scope>provided</scope>
       </dependency>
+<!--    Apache Commons dbcp-->
+    <dependency>
+      <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId>
+      <version>${commons-dbcp.version}</version>
+    </dependency>
+
 
   </dependencies>
 
