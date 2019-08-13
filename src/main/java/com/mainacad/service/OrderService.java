@@ -10,9 +10,9 @@ import java.util.List;
 
 public class OrderService {
 
-    public static Order createOrderByItemAndUser(Item item, Integer amount, User user){
+    public static Order createByItemAndUser(Integer itemId, Integer amount, User user){
         Order order = new Order();
-        order.setItemId(item.getId());
+        order.setItemId(itemId);
         order.setAmount(amount);
         // get or create open cart
         Cart cart = CartService.findOpenCartByUser(user.getId());
@@ -23,11 +23,9 @@ public class OrderService {
         return OrderDAO.create(order);
     }
 
-    public static List<Order> getOrdersByCatr(Cart cart){
-        return OrderDAO.findByCart(cart.getId());
+    public static List<Order> getOrdersByCatr(Integer cartId){
+        return OrderDAO.findByCart(cartId);
     }
 
-    public List<Order> findClosedOrdersByUserAndPeriod(User user, Long from, Long to){
-        return OrderDAO.findClosedOrdersByUserAndPeriod(user.getId(), from, to);
-    }
+
 }

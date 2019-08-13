@@ -44,11 +44,6 @@ public class CartDAO {
         return null;
     }
 
-    public static Cart update(Cart cart){
-
-        return null;
-    }
-
     public static Cart findById(Integer id){
         String statement = "SELECT * FROM carts WHERE id=?";
 
@@ -76,11 +71,6 @@ public class CartDAO {
         return null;
     }
 
-    public static List<Cart> findByUser(User user){
-
-        return null;
-    }
-
     public static Cart findOpenCartByUser(Integer userId){
         String statement = "SELECT * FROM carts WHERE closed=0 AND user_id=?";
 
@@ -103,6 +93,22 @@ public class CartDAO {
             }
 
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Cart close(Integer catrId) {
+        String sql = "UPDATE carts SET closed=? WHERE id=?";
+        try (Connection connection = ConnectionToDB.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setBoolean(1, true);
+            preparedStatement.setInt(2, catrId);
+            preparedStatement.executeUpdate();
+            Cart cart = findById(catrId);
+            return cart;
+        } catch (Exception e){
             e.printStackTrace();
         }
         return null;

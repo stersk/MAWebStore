@@ -42,11 +42,6 @@ public class OrderDAO {
         return null;
     }
 
-    public static Order update(Order order){
-
-        return null;
-    }
-
     public static Order findById(Integer id){
         String statement = "SELECT * FROM orders WHERE id=?";
 

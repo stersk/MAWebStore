@@ -107,12 +107,6 @@ public class UserDAO {
         return null;
     }
 
-    public static List<User> findAll() {
-        String sql = "SELECT * FROM users";
-
-        return null;
-    }
-
     public static void delete(Integer id) {
         String sql = "DELETE FROM users WHERE id=?";
         try (Connection connection = ConnectionToDB.getConnection();

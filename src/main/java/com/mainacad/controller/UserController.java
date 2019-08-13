@@ -1,5 +1,6 @@
 package com.mainacad.controller;
 
+import com.mainacad.dao.UserDAO;
 import com.mainacad.model.User;
 import com.mainacad.service.UserService;
 
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class UserController extends HttpServlet {
 
@@ -17,19 +19,36 @@ public class UserController extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
 
-        String login = req.getParameter("login");
-        String password = req.getParameter("password");
+        String action = req.getParameter("action");
 
-        User user = UserService.getAuthUser(login, password);
-        if (user!=null){
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/user-cabinet.jsp");
-            req.getSession().setAttribute("user-name", user.getFirstName() + " " + user.getLastName());
+        if(action.equals("login")){
+            String login = req.getParameter("login");
+            String password = req.getParameter("password");
+
+            User user = UserService.findByLoginAndPassword(login, password);
+            if (user!=null){
+                RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/items.jsp");
+                req.setAttribute("user", user);
+                dispatcher.forward(req, resp);
+            }
+            else{
+                RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/wrong-auth.jsp");
+                dispatcher.forward(req, resp);
+            }
+        } else if(action.equals("register")){
+            String login = req.getParameter("login");
+            String password = req.getParameter("password");
+            String firstName = req.getParameter("fname");
+            String lastName = req.getParameter("lname");
+            User user = new User(login, password, firstName, lastName);
+
+            User savedUser = UserDAO.create(user);
+
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/items.jsp");
+            req.setAttribute("user", savedUser);
             dispatcher.forward(req, resp);
         }
-        else{
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/wrong-auth.jsp");
-            dispatcher.forward(req, resp);
-        }
+
 
 
     }
