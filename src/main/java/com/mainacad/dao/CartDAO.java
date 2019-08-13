@@ -154,4 +154,29 @@ public class CartDAO {
 
         return cart;
     }
+
+    public static Integer getCartSum(Integer cartId){
+        String statement = "SELECT SUM(i.price*o.amount) AS total_sum FROM items i " +
+                "JOIN orders o ON o.item_id = i.id " +
+                "JOIN carts c ON o.cart_id = c.id " +
+                "WHERE c.id=?";
+
+        try (Connection connection = ConnectionToDB.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(statement)) {
+
+            preparedStatement.setInt(1, cartId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                return  resultSet.getInt("total_sum");
+            }
+
+            return null;
+
+        } catch (SQLException e) {
+            logger.severe(e.getMessage());
+        }
+
+        return null;
+    }
 }

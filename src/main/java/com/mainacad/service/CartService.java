@@ -18,4 +18,20 @@ public class CartService {
     public static Cart findOpenCartByUser(Integer userId){
         return CartDAO.findOpenCartByUser(userId);
     }
+
+    public static Cart closeCartById(Integer cartId){
+        Cart cart = CartDAO.findById(cartId);
+        if (cart != null) {
+            cart.setClosed(true);
+            CartDAO.update(cart);
+
+            return cart;
+        }
+
+        return null;
+    }
+
+    public static Integer getCartSum(Cart cart){
+        return CartDAO.getCartSum(cart.getId());
+    }
 }

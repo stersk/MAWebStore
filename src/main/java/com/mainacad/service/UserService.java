@@ -17,5 +17,13 @@ public class UserService {
         return null;
     }
 
+    public static User changePassword(User user, String newPassword) {
+      user.setPassword(newPassword);
 
+      return UserDAO.update(user);
+    }
+
+    public static User update(User user) {
+      return UserDAO.update(user);
+    }
 }
