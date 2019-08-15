@@ -31,16 +31,16 @@ class UserServiceTest {
 
   @Test
   void getAuthUser() {
-    User checkedUser = UserService.getAuthUser(USER_LOGIN, USER_PASSWORD);
+    User checkedUser = UserService.findByLoginAndPassword(USER_LOGIN, USER_PASSWORD);
     assertNotNull(checkedUser);
     assertEquals(users.get(0).getId(), checkedUser.getId());
 
-    checkedUser = UserService.getAuthUser(USER_LOGIN + "_", USER_PASSWORD);
+    checkedUser = UserService.findByLoginAndPassword(USER_LOGIN + "_", USER_PASSWORD);
     if (checkedUser != null) {
       assertNotEquals(users.get(0).getId(), checkedUser.getId());
     }
 
-    checkedUser = UserService.getAuthUser(USER_LOGIN, USER_PASSWORD + "_");
+    checkedUser = UserService.findByLoginAndPassword(USER_LOGIN, USER_PASSWORD + "_");
     if (checkedUser != null) {
       assertNotEquals(users.get(0).getId(), checkedUser.getId());
     }

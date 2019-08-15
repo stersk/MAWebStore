@@ -1,0 +1,5 @@
+1. Registration(index.jsp) -> RegistrationBlank(register.jsp) -> /user ()
+2. Cabinet(items.jsp) -> /order( + check open cart for user)
+3. ...
+4. Prove cart(cart.jsp) -> /cart
+5. Thanks page(final.jsp + orderCode:cart.creationDate_ + sum()) -> (items.jsp)

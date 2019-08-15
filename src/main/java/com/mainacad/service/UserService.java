@@ -9,7 +9,7 @@ public class UserService {
         return UserDAO.create(user);
     }
 
-    public static User getAuthUser(String login, String password){
+    public static User findByLoginAndPassword(String login, String password){
         User user = UserDAO.findByLogin(login);
         if (user != null && user.getPassword().equals(password)) {
             return user;
@@ -25,5 +25,13 @@ public class UserService {
 
     public static User update(User user) {
       return UserDAO.update(user);
+    }
+
+    public static User findByLogin(String login){
+        User user = UserDAO.findByLogin(login);
+        if (user != null) {
+            return user;
+        }
+        return null;
     }
 }

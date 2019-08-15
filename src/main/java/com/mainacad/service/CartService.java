@@ -19,16 +19,8 @@ public class CartService {
         return CartDAO.findOpenCartByUser(userId);
     }
 
-    public static Cart closeCartById(Integer cartId){
-        Cart cart = CartDAO.findById(cartId);
-        if (cart != null) {
-            cart.setClosed(true);
-            CartDAO.update(cart);
-
-            return cart;
-        }
-
-        return null;
+    public static Cart close(Integer catrId){
+        return CartDAO.close(catrId);
     }
 
     public static Integer getCartSum(Cart cart){
