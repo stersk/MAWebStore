@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class UserController extends HttpServlet {
@@ -26,9 +27,10 @@ public class UserController extends HttpServlet {
 
             User user = UserService.findByLoginAndPassword(login, password);
             if (user!=null){
-                RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/items.jsp");
-                req.setAttribute("user", user);
-                dispatcher.forward(req, resp);
+                HttpSession session = req.getSession();
+                session.setAttribute("user", user);
+
+                resp.sendRedirect(req.getContextPath() + "/items");
             }
             else{
                 RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/wrong-auth.jsp");

@@ -68,8 +68,6 @@
       <artifactId>commons-dbcp</artifactId>
       <version>${commons-dbcp.version}</version>
     </dependency>
-
-
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>

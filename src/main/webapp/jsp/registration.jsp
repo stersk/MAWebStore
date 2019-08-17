@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <head>
     <title>REGISTRATION</title>
 </head>
