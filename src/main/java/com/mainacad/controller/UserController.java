@@ -13,6 +13,22 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class UserController extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
+
+        String action = req.getParameter("action");
+
+        if(action.equals("logout")){
+            HttpSession session = req.getSession();
+            session.setAttribute("user", null);
+
+            resp.sendRedirect(req.getContextPath() + "/");
+        } else {
+            super.doGet(req, resp);
+        }
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -36,7 +52,7 @@ public class UserController extends HttpServlet {
                 RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/wrong-auth.jsp");
                 dispatcher.forward(req, resp);
             }
-        } else if(action.equals("register")){
+        } else if (action.equals("register")){
             String login = req.getParameter("login");
             String password = req.getParameter("password");
             String firstName = req.getParameter("fname");
@@ -52,6 +68,11 @@ public class UserController extends HttpServlet {
                 req.setAttribute("userCreated", true);
                 resp.sendRedirect(req.getContextPath() + "/items");
             }
+        } else if (action.equals("logout")) {
+            HttpSession session = req.getSession();
+            session.setAttribute("user", null);
+
+            resp.sendRedirect(req.getContextPath() + "/");
         }
     }
 }

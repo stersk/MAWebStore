@@ -19,7 +19,7 @@
     <c:set var="user" value="${user}" scope="session" />
     <c:set var="items" value="${items}" scope="request" />
 
-    <body>
+    <body class="bg-light">
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <a class="navbar-brand" href="#">Our store</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,13 +34,13 @@
                         Hello, <b><c:out value="${user.firstName}" /> <c:out value="${user.login}" /></b>
                     </span>
                     <a class="btn btn-sm btn-outline-secondary" href="#" type="button">Cart</a>
-                    <a class="btn btn-sm btn-outline-secondary" href="#" type="button">Logout</a>
+                    <a class="btn btn-sm btn-outline-secondary" href="<c:url value = '/user?action=logout'/>" type="button">Logout</a>
                 </form>
                 </c:if>
                 <c:if test = "${user == null}">
                 <form class="form mt-2 mt-md-0">
-                    <a class="btn btn-sm btn-outline-secondary" href="#" type="button">Register</a>
-                    <a class="btn btn-sm btn-outline-secondary" href="#" type="button">Login</a>
+                    <a class="btn btn-sm btn-outline-secondary" href="<c:url value = '/jsp/registration.jsp'/>" type="submit">Register</a>
+                    <a class="btn btn-sm btn-outline-secondary" href="<c:url value = '/'/>" type="submit">Login</a>
                 </form>
                 </c:if>
                 <form class="form-inline mt-2 mt-md-0 d-none">
