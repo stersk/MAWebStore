@@ -23,7 +23,10 @@
             <label for="inputPassword" class="sr-only">Password</label>
             <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Input password" required>
             <button class="btn btn-lg btn-dark btn-block" type="submit">Log in</button>
-            <p class="mt-5 mb-3 text-muted">&copy; 2019</p>
+            <p>
+                <a href="<c:url value = '/jsp/registration.jsp'/>">Register</a>
+            </p>
+            <p class="mt-5 mb-3 text-muted">&copy; 2019 Sters</p>
         </form>
     </body>
 </html>

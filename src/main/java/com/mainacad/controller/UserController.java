@@ -45,13 +45,13 @@ public class UserController extends HttpServlet {
 
             User savedUser = UserDAO.create(user);
 
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/items.jsp");
-            req.setAttribute("user", savedUser);
-            dispatcher.forward(req, resp);
+            if (savedUser != null) {
+                HttpSession session = req.getSession();
+                session.setAttribute("user", user);
+
+                req.setAttribute("userCreated", true);
+                resp.sendRedirect(req.getContextPath() + "/items");
+            }
         }
-
-
-
     }
-
 }
