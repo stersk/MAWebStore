@@ -46,9 +46,8 @@
                         </div>
 
                         <div class="mb-3">
-<%--                            TODO Check username already exists--%>
                             <label for="username">Username</label>
-                            <input type="text" autocomplete="username" name="login" class="form-control" id="username" placeholder="Username" required>
+                            <input type="text" autocomplete="username" name="login" class="form-control" id="username" placeholder="" oninput="checkPasswordLoginAvailability(this);" required>
                             <div class="invalid-feedback" style="width: 100%;">
                                 Your username is required.
                             </div>
@@ -62,7 +61,7 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <input type="password" class="form-control" id="passwordConfirm" placeholder="Password confirmation" oninput="check(this);" required>
+                            <input type="password" class="form-control" id="passwordConfirm" placeholder="Password confirmation" oninput="checkPasswordConfirmation(this);" required>
                             <div class="invalid-feedback" style="width: 100%;">
                                 Password confirmation is required.
                             </div>

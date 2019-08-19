@@ -18,17 +18,50 @@
     }, false);
 })();
 
-function check(input) {
+var timerId;
+
+function checkPasswordConfirmation(inputElement) {
     var password = $('#password').val();
     var validationMessage = "";
 
-    if (input.value == "") {
+    if (inputElement.value == "") {
         validationMessage = "Password confirmation is required.";
-    } else if (input.value != password) {
+    } else if (inputElement.value != password) {
         validationMessage = "Password an confirmation password are different. Check your input.";
-        input.setCustomValidity('');
     }
 
-    input.setCustomValidity(validationMessage);
-    $(input).parent().find('.invalid-feedback').first().text(validationMessage);
-};
+    inputElement.setCustomValidity(validationMessage);
+    $(inputElement).parent().find('.invalid-feedback').first().text(validationMessage);
+}
+
+function checkPasswordLoginAvailability(inputElement){
+    if (timerId != null) {
+        clearTimeout(timerId);
+        timerId = null;
+    }
+
+    timerId = setTimeout(function () {
+        $.ajax({
+            type: 'get',
+            url: '../user',
+            dataType : "json",
+            data: {login: inputElement.value,
+                   action: 'userExist'},
+            success: function (data, textStatus) {
+                var validationMessage = "";
+
+                if (data.userExist) {
+                    validationMessage = "This username '" + inputElement.value + "' used by another user. Input another username, please";
+                } else if (inputElement.value == "") {
+                    validationMessage = "Your username is required.";
+                }
+
+                inputElement.setCustomValidity(validationMessage);
+                $(inputElement).parent().find('.invalid-feedback').first().text(validationMessage);
+
+                inputElement.checkValidity();
+                inputElement.reportValidity();
+            }
+        });
+    }, 1000);
+}

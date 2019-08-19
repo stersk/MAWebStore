@@ -1,5 +1,6 @@
 package com.mainacad.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mainacad.dao.UserDAO;
 import com.mainacad.model.User;
 import com.mainacad.service.UserService;
@@ -11,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserController extends HttpServlet {
     @Override
@@ -20,11 +24,28 @@ public class UserController extends HttpServlet {
 
         String action = req.getParameter("action");
 
-        if(action.equals("logout")){
-            HttpSession session = req.getSession();
-            session.setAttribute("user", null);
+        if(action.equals("logout")) {
+          HttpSession session = req.getSession();
+          session.setAttribute("user", null);
 
-            resp.sendRedirect(req.getContextPath() + "/");
+          resp.sendRedirect(req.getContextPath() + "/");
+        } else if (action.equals("userExist")) {
+          User user = UserService.findByLogin(req.getParameter("login"));
+
+            Map<String, Boolean> map = new HashMap<>();
+            map.put("userExist", user != null);
+
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonResult = mapper.writerWithDefaultPrettyPrinter()
+                    .writeValueAsString(map);
+
+            PrintWriter respWriter = resp.getWriter();
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+
+            respWriter.print(jsonResult);
+            respWriter.flush();
+
         } else {
             super.doGet(req, resp);
         }
