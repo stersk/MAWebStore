@@ -23,6 +23,19 @@ public class OrderService {
         return OrderDAO.create(order);
     }
 
+    //    TODO Tests
+    public static Order addItemToOrder(Item item, User user){
+        Order existingOrder = CartService.getOrdersFromOpenCartByUser(user.getId()).stream().filter(order -> order.getItemId().equals(item.getId())).findAny().orElse(null);
+        if (existingOrder == null) {
+            existingOrder = createOrderByItemAndUser(item, 1, user);
+        } else {
+            existingOrder.setAmount(existingOrder.getAmount() + 1);
+            OrderDAO.update(existingOrder);
+        }
+
+        return existingOrder;
+    }
+
     public static List<Order> getOrdersByCart(Cart cart){
         return OrderDAO.findByCart(cart.getId());
     }

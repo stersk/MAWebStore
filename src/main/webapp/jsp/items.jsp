@@ -14,6 +14,8 @@
 
         <script type="text/javascript" src=<c:url value = "/static/js/jquery-3.4.1.min.js"/>></script>
         <script type="text/javascript" src=<c:url value = "/static/js/bootstrap.min.js"/>></script>
+
+        <script type="text/javascript" src=<c:url value = "/static/js/items.js"/>></script>
     </head>
 
     <c:set var="user" value="${user}" scope="session" />
@@ -51,6 +53,7 @@
         </nav>
 
         <main role="main" class="container-fluid bg-light">
+            <div id="alert-container"></div>
             <div class="row">
                 <c:forEach items="${items}" var="item">
                     <div class="col-xl-2 col-md-4 col-sm-6 col-12">
@@ -63,7 +66,7 @@
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
                                         <c:if test = "${user != null}">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Add to cart</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary btn-add-to-cart" data-id="${item.id}">Add to cart</button>
                                         </c:if>
                                     </div>
                                     <small class="text-muted d-none">9 mins</small>
