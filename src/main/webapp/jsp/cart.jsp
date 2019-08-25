@@ -15,7 +15,7 @@
         <script type="text/javascript" src=<c:url value = "/static/js/jquery-3.4.1.min.js"/>></script>
         <script type="text/javascript" src=<c:url value = "/static/js/bootstrap.min.js"/>></script>
 
-        <script type="text/javascript" src=<c:url value = "/static/js/items.js"/>></script>
+        <script type="text/javascript" src=<c:url value = "/static/js/cart.js"/>></script>
     </head>
 
     <c:set var="user" value="${user}" scope="session" />
@@ -72,15 +72,15 @@
                         <c:forEach items="${items}" var="item">
                             <c:if test="${order.itemId == item.id}">
                                 <tr data-order-id="${order.id}">
-                                    <th scope="row">${counter}</th>
+                                    <th scope="row" class="concrete-row-number">${counter}</th>
                                     <c:set var="counter" value="${counter + 1}" scope="page" />
-                                    <td>${item.name}</td>
+                                    <td class="item-name">${item.name}</td>
                                     <td>${order.amount}</td>
                                     <td>${item.price / 100}</td>
                                     <td>${order.amount * item.price / 100}</td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary btn-remove-item">Delete</button>
                                     </td>
                                 </tr>
                             </c:if>

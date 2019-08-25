@@ -1,5 +1,6 @@
 package com.mainacad.controller;
 
+import com.mainacad.dao.OrderDAO;
 import com.mainacad.model.Item;
 import com.mainacad.model.Order;
 import com.mainacad.model.User;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,5 +46,28 @@ public class CartController extends HttpServlet{
 
     RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/cart.jsp");
     dispatcher.forward(req, resp);
+  }
+
+  @Override
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    req.setCharacterEncoding("UTF-8");
+    resp.setCharacterEncoding("UTF-8");
+
+    String action = req.getParameter("action");
+
+    if(action.equals("removeFromOpenCart")) {
+      Integer orderId = Integer.parseInt(req.getParameter("orderId"));
+      OrderDAO.delete(orderId);
+
+      PrintWriter respWriter = resp.getWriter();
+      resp.setContentType("application/json");
+      resp.setCharacterEncoding("UTF-8");
+
+      respWriter.print("{}");
+      respWriter.flush();
+
+    } else {
+      super.doPost(req, resp);
+    }
   }
 }
