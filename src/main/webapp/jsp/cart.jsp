@@ -10,7 +10,7 @@
         <title>Store</title>
 
         <link rel="stylesheet" href="<c:url value = '/static/css/bootstrap.min.css'/>">
-        <link rel="stylesheet" href="<c:url value = '/static/css/items.css'/>">
+        <link rel="stylesheet" href="<c:url value = '/static/css/cart.css'/>">
 
         <script type="text/javascript" src=<c:url value = "/static/js/jquery-3.4.1.min.js"/>></script>
         <script type="text/javascript" src=<c:url value = "/static/js/bootstrap.min.js"/>></script>
@@ -20,6 +20,8 @@
 
     <c:set var="user" value="${user}" scope="session" />
     <c:set var="items" value="${items}" scope="request" />
+    <c:set var="orders" value="${orders}" scope="request" />
+    <c:set var="counter" value="1" scope="page" />
 
     <body class="bg-light">
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -35,7 +37,7 @@
                     <span class="navbar-text hello-user-text">
                         Hello, <b><c:out value="${user.firstName}" /> <c:out value="${user.login}" /></b>
                     </span>
-                    <a class="btn btn-sm btn-outline-secondary" href="<c:url value = '/cart'/>" type="button">Cart</a>
+                    <a class="btn btn-sm btn-outline-secondary" href="#" type="button">Cart</a>
                     <a class="btn btn-sm btn-outline-secondary" href="<c:url value = '/user?action=logout'/>" type="button">Logout</a>
                 </form>
                 </c:if>
@@ -54,28 +56,39 @@
 
         <main role="main" class="container-fluid bg-light">
             <div id="alert-container"></div>
-            <div class="row">
-                <c:forEach items="${items}" var="item">
-                    <div class="col-xl-2 col-md-4 col-sm-6 col-12">
-                        <div class="card mb-4 shadow-sm">
-                            <img src="<c:url value = "/static/img/nophoto.jpg"/>" class="card-img-top border-bottom" width="auto" height="225"  alt="${item.name}"/>
-                            <div class="card-body">
-                                <h5 class="card-text">${item.name}</h5>
-                                <p class="card-text"><b>Price: </b>${item.getPrice()}<span  class="float-right"><b>code: </b>${item.itemCode}</span></p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <c:if test = "${user != null}">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary btn-add-to-cart" data-id="${item.id}">Add to cart</button>
-                                        </c:if>
-                                    </div>
-                                    <small class="text-muted d-none">9 mins</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </c:forEach>
-            </div>
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col" class="row-number col-auto">#</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Sum</th>
+                    <th scope="col" class="row-buttons-panel col-auto"></th>
+                </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${orders}" var="order">
+                        <c:forEach items="${items}" var="item">
+                            <c:if test="${order.itemId == item.id}">
+                                <tr data-order-id="${order.id}">
+                                    <th scope="row">${counter}</th>
+                                    <c:set var="counter" value="${counter + 1}" scope="page" />
+                                    <td>${item.name}</td>
+                                    <td>${order.amount}</td>
+                                    <td>${item.price / 100}</td>
+                                    <td>${order.amount * item.price / 100}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
+                                    </td>
+                                </tr>
+                            </c:if>
+                        </c:forEach>
+                    </c:forEach>
+                </tbody>
+            </table>
+
         </main>
     </body>
 </html>

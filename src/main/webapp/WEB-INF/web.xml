@@ -22,12 +22,22 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>items</servlet-name>
-    <servlet-class>com.mainacad.controller.OrderController</servlet-class>
-  </servlet>
+  <servlet-name>items</servlet-name>
+  <servlet-class>com.mainacad.controller.OrderController</servlet-class>
+</servlet>
 
   <servlet-mapping>
     <servlet-name>items</servlet-name>
     <url-pattern>/items</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>cart</servlet-name>
+    <servlet-class>com.mainacad.controller.CartController</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>cart</servlet-name>
+    <url-pattern>/cart</url-pattern>
   </servlet-mapping>
 </web-app>
