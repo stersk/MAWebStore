@@ -1,6 +1,8 @@
 package com.mainacad.controller;
 
-import com.mainacad.dao.OrderDAO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mainacad.model.Cart;
 import com.mainacad.model.Item;
 import com.mainacad.model.Order;
 import com.mainacad.model.User;
@@ -16,7 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CartController extends HttpServlet{
@@ -27,6 +31,7 @@ public class CartController extends HttpServlet{
 
     List<Order> orders = new ArrayList<>();
     List<Item> items = new ArrayList<>();
+    Integer cartSum = 0;
     User currentUser = null;
 
     Object userAttributeValue = req.getSession(false).getAttribute("user");
@@ -39,11 +44,16 @@ public class CartController extends HttpServlet{
               .map(order -> ItemService.findById(order.getItemId()))
               .collect(Collectors.toList());
 
+      Cart openCart = CartService.findOpenCartByUser(currentUser.getId());
+      if (openCart != null) {
+        cartSum = CartService.getCartSum(openCart);
+      }
     }
 
     req.setAttribute("user", currentUser);
     req.setAttribute("orders", orders);
     req.setAttribute("items", items);
+    req.setAttribute("cartSum", cartSum);
 
     RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/cart.jsp");
     dispatcher.forward(req, resp);
@@ -55,39 +65,61 @@ public class CartController extends HttpServlet{
     resp.setCharacterEncoding("UTF-8");
 
     String action = req.getParameter("action");
-    Boolean success = false;
+    String jsonRespond = null;
 
     if(action.equals("removeFromOpenCart")) {
       Integer orderId = Integer.parseInt(req.getParameter("orderId"));
-      OrderDAO.delete(orderId);
 
-      success = true;
+      jsonRespond = deleteOrderAndReturnCartSumInJson(orderId);
 
     } else if (action.equals("updateItemAmountInOrder")) {
       Integer orderId = Integer.parseInt(req.getParameter("orderId"));
       Integer amount = Integer.parseInt(req.getParameter("amount"));
 
       if (amount.equals(0)) {
-        OrderService.deleteOrder(orderId);
-        success = true;
+        jsonRespond = deleteOrderAndReturnCartSumInJson(orderId);
 
       } else {
-        if (OrderService.updateItemAmountInOrder(orderId, amount) != null) {
-          success = true;
-        };
+        Order updatedOrder = OrderService.updateItemAmountInOrder(orderId, amount);
+        if (updatedOrder != null) {
+          Cart cart = CartService.findById(updatedOrder.getCartId());
+          Integer cartSum = CartService.getCartSum(cart);
+          Map<String, String> respondData = new HashMap<>();
+          respondData.put("cartSum", cartSum.toString());
+
+          ObjectMapper mapper = new ObjectMapper();
+          jsonRespond = mapper.writeValueAsString(respondData);
+        }
       }
 
     } else {
       super.doPost(req, resp);
     }
 
-    if (success) {
+    if (jsonRespond != null) {
       PrintWriter respWriter = resp.getWriter();
       resp.setContentType("application/json");
       resp.setCharacterEncoding("UTF-8");
 
-      respWriter.print("{}");
+      respWriter.print(jsonRespond);
       respWriter.flush();
     }
+  }
+
+  private static String deleteOrderAndReturnCartSumInJson(Integer orderId) throws JsonProcessingException {
+    String jsonResult = "{}";
+
+    Order orderToDelete = OrderService.findById(orderId);
+    Cart cart = CartService.findById(orderToDelete.getCartId());
+
+    OrderService.deleteOrder(orderId);
+    Integer cartSum = CartService.getCartSum(cart);
+    Map<String, String> respondData = new HashMap<>();
+    respondData.put("cartSum", cartSum.toString());
+
+    ObjectMapper mapper = new ObjectMapper();
+    jsonResult = mapper.writeValueAsString(respondData);
+
+    return jsonResult;
   }
 }

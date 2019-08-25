@@ -29,6 +29,7 @@ function removeFromCart(event) {
             $(event.target).closest('tr').remove();
 
             refillRowNumbers();
+            updateTotalCartSumElement(data.cartSum);
         },
         error: function (data, textStatus) {
             var alertText = '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
@@ -64,13 +65,13 @@ function openEditDialog(event) {
     $('#itemPrice').val($('.item-price',rowElement).first().text().trim());
     $('#itemAmount').val($('.item-amount',rowElement).first().text().trim());
 
-    $('#itemSum').val(Math.round($('#itemPrice').val() * $('#itemAmount').val() * 100) / 100);
+    $('#itemSum').val(($('#itemPrice').val() * $('#itemAmount').val()).toFixed());
 
     $('#changeAmountModal').modal('show');
 }
 
 function onAmountChange(event) {
-    $('#itemSum').val(Math.round($('#itemPrice').val() * $(event.target).val() * 100) / 100);
+    $('#itemSum').val(($('#itemPrice').val() * $(event.target).val()).toFixed(2));
 }
 
 function onItemAmountCommit(event) {
@@ -101,7 +102,6 @@ function onItemAmountCommit(event) {
                     '</div>\n';
 
                 rowElement.remove();
-                refillRowNumbers();
 
             } else {
                 alertText = '<div class="alert alert-success alert-dismissible fade show" role="alert">\n' +
@@ -113,7 +113,7 @@ function onItemAmountCommit(event) {
 
                 var price = $('.item-price').first().text().trim();
                 var newAmount = $('#itemAmount').val();
-                var newSum = Math.round(newAmount * price * 100) / 100;
+                var newSum = (newAmount * price).toFixed(2);
 
                 amountElement.text(newAmount);
                 $('.item-sum', rowElement).first().text(newSum);
@@ -128,6 +128,7 @@ function onItemAmountCommit(event) {
             $(event.target).closest('tr').remove();
 
             refillRowNumbers();
+            updateTotalCartSumElement(data.cartSum);
             $('#changeAmountModal').modal('hide');
         },
         error: function (data, textStatus) {
@@ -145,4 +146,14 @@ function onItemAmountCommit(event) {
             }, 5000);
         }
     });
+}
+
+function updateTotalCartSumElement(value) {
+    var totalSum =( value / 100).toLocaleString(undefined, {
+        style: 'currency',
+        currencyDisplay: 'symbol',
+        currency: 'USD',
+    });
+
+    $('#cart-sum').text('Total cart sum: ' + totalSum);
 }

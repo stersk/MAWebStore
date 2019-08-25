@@ -40,6 +40,11 @@ public class OrderService {
         return OrderDAO.findByCart(cart.getId());
     }
 
+    public static Order findById(Integer id) {
+        return OrderDAO.findById(id);
+    }
+
+//    TODO Check and delete unused function
     public static List<Order> findClosedOrdersByUserAndPeriod(User user, Long from, Long to){
         return OrderDAO.findClosedOrdersByUserIdAndPeriod(user.getId(), from, to);
     }

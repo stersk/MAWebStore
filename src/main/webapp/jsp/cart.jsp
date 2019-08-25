@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en" class="mdl-js">
     <head>
@@ -21,6 +22,7 @@
     <c:set var="user" value="${user}" scope="session" />
     <c:set var="items" value="${items}" scope="request" />
     <c:set var="orders" value="${orders}" scope="request" />
+    <c:set var="cartSum" value="${cartSum}" scope="request" />
     <c:set var="counter" value="1" scope="page" />
 
     <body class="bg-light">
@@ -61,8 +63,8 @@
                     <th scope="col" class="row-number col-auto">#</th>
                     <th scope="col">Item</th>
                     <th scope="col">Amount</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Sum</th>
+                    <th scope="col">Price, $</th>
+                    <th scope="col">Sum, $</th>
                     <th scope="col" class="row-buttons-panel col-auto"></th>
                 </tr>
                 </thead>
@@ -87,6 +89,8 @@
                     </c:forEach>
                 </tbody>
             </table>
+            <hr>
+            <h4 id="cart-sum" class="float-right">Total cart sum: <fmt:formatNumber value="${cartSum / 100}" currencySymbol="$" type="currency" /></h4>
         </main>
         <!-- Modal -->
         <div class="modal fade" id="changeAmountModal" data-order-id="" tabindex="-1" role="dialog" aria-labelledby="changeAmountModalLabel" aria-hidden="true">
