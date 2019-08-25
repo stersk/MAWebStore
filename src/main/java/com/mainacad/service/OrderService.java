@@ -40,7 +40,17 @@ public class OrderService {
         return OrderDAO.findByCart(cart.getId());
     }
 
-    public List<Order> findClosedOrdersByUserAndPeriod(User user, Long from, Long to){
+    public static List<Order> findClosedOrdersByUserAndPeriod(User user, Long from, Long to){
         return OrderDAO.findClosedOrdersByUserIdAndPeriod(user.getId(), from, to);
+    }
+
+    public static void deleteOrder(Integer orderId) {
+        OrderDAO.delete(orderId);
+    }
+
+    public static Order updateItemAmountInOrder(Integer id, Integer amount) {
+        Order order = OrderDAO.findById(id);
+        order.setAmount(amount);
+        return OrderDAO.update(order);
     }
 }

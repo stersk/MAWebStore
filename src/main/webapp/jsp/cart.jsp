@@ -37,7 +37,6 @@
                     <span class="navbar-text hello-user-text">
                         Hello, <b><c:out value="${user.firstName}" /> <c:out value="${user.login}" /></b>
                     </span>
-                    <a class="btn btn-sm btn-outline-secondary" href="#" type="button">Cart</a>
                     <a class="btn btn-sm btn-outline-secondary" href="<c:url value = '/user?action=logout'/>" type="button">Logout</a>
                 </form>
                 </c:if>
@@ -75,11 +74,11 @@
                                     <th scope="row" class="concrete-row-number">${counter}</th>
                                     <c:set var="counter" value="${counter + 1}" scope="page" />
                                     <td class="item-name">${item.name}</td>
-                                    <td>${order.amount}</td>
-                                    <td>${item.price / 100}</td>
+                                    <td class="item-amount">${order.amount}</td>
+                                    <td class="item-price">${item.price / 100}</td>
                                     <td>${order.amount * item.price / 100}</td>
                                     <td>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary btn-edit-item">Edit</button>
                                         <button type="button" class="btn btn-sm btn-outline-secondary btn-remove-item">Delete</button>
                                     </td>
                                 </tr>
@@ -88,7 +87,49 @@
                     </c:forEach>
                 </tbody>
             </table>
-
         </main>
+        <!-- Modal -->
+        <div class="modal fade" id="changeAmountModal" data-order-id="" tabindex="-1" role="dialog" aria-labelledby="changeAmountModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="changeAmountModalLabel">Change amount</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="">
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="itemAmount" class="">Amount</label>
+                                        <input type="number" class="form-control" id="itemAmount" min="0" step="1" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="itemPrice" class="">Price</label>
+                                        <input type="text" class="form-control" id="itemPrice" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="itemSum" class="">Sum</label>
+                                        <input type="text" class="form-control" id="itemSum" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                        <button type="button" id="btnAmountEditCommit" class="btn btn-dark">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
