@@ -91,8 +91,18 @@
             </table>
             <hr>
             <h4 id="cart-sum" class="float-right">Total cart sum: <fmt:formatNumber value="${cartSum / 100}" currencySymbol="$" type="currency" /></h4>
+            <form class="form" action="<c:url value = '/cart'/>" method="post">
+                <input id="cart-operation-action" type="text" name="action" value="" hidden>
+                <div>
+                    <a class="btn btn-light btn-outline-secondary mb-2" href="<c:url value = '/items'/>">Back to items list</a>
+                    <c:if test="${orders.size() > 0}">
+                    <button id="confirm-btn" type="submit" class="btn btn-dark mb-2">Confirm cart</button>
+                    <button id="discard-btn" type="submit" class="btn btn-dark mb-2">Discard cart</button>
+                    </c:if>
+                </div>
+            </form>
         </main>
-        <!-- Modal -->
+        <!-- Change item amount dialog -->
         <div class="modal fade" id="changeAmountModal" data-order-id="" tabindex="-1" role="dialog" aria-labelledby="changeAmountModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -107,8 +117,8 @@
                             <div class="form-row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="itemAmount" class="">Amount</label>
-                                        <input type="number" class="form-control" id="itemAmount" min="0" step="1" value="">
+                                        <label for="item-amount" class="">Amount</label>
+                                        <input type="number" class="form-control" id="item-amount" min="0" step="1" value="">
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +140,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                        <button type="button" id="btnAmountEditCommit" class="btn btn-dark">Save changes</button>
+                        <button type="button" id="amount-edit-commit-btn" class="btn btn-dark">Save changes</button>
                     </div>
                 </div>
             </div>

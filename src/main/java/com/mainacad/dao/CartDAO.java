@@ -181,17 +181,18 @@ public class CartDAO {
     }
 
     public static Cart close(Integer cartId) {
-        String sql = "UPDATE carts SET closed=? WHERE id=?";
+        String sql = "UPDATE carts SET creation_time=?, closed=? WHERE id=?";
         try (Connection connection = ConnectionToDB.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setBoolean(1, true);
-            preparedStatement.setInt(2, cartId);
+            preparedStatement.setLong(1, System.currentTimeMillis());
+            preparedStatement.setBoolean(2, true);
+            preparedStatement.setInt(3, cartId);
             preparedStatement.executeUpdate();
             Cart cart = findById(cartId);
             return cart;
         } catch (Exception e){
-            e.printStackTrace();
+            logger.severe(e.getMessage());
         }
         return null;
     }

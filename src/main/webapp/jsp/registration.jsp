@@ -67,7 +67,7 @@
                             </div>
                         </div>
                         <hr class="mb-4">
-                        <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to register</button>
+                        <button class="btn btn-dark btn-lg btn-block" type="submit">Continue to register</button>
                         <br>
                         <p>
                             <a href="<c:url value = '/index.jsp'/>">Back to the login form</a>

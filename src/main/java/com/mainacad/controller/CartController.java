@@ -17,10 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CartController extends HttpServlet{
@@ -64,7 +61,14 @@ public class CartController extends HttpServlet{
     req.setCharacterEncoding("UTF-8");
     resp.setCharacterEncoding("UTF-8");
 
+    User currentUser = null;
     String action = req.getParameter("action");
+
+    Object userAttributeValue = req.getSession(false).getAttribute("user");
+    if (userAttributeValue != null) {
+      currentUser = (User) userAttributeValue;
+    };
+
     String jsonRespond = null;
 
     if(action.equals("removeFromOpenCart")) {
@@ -92,6 +96,36 @@ public class CartController extends HttpServlet{
         }
       }
 
+    } else if (action.equals("confirm")) {
+      if (currentUser != null) {
+        Cart openedCart = CartService.findOpenCartByUser(currentUser.getId());
+
+        Integer itemsCount = OrderService.getOrdersByCart(openedCart).size();
+        Integer cartSum = CartService.getCartSum(openedCart);
+
+        if (itemsCount > 0) {
+          openedCart = CartService.close(openedCart.getId());
+
+          req.setAttribute("user", currentUser);
+          req.setAttribute("cart", openedCart);
+          req.setAttribute("itemsCount", itemsCount);
+          req.setAttribute("cartSum", cartSum);
+          req.setAttribute("creationDate", new Date(openedCart.getCreationTime()));
+
+          RequestDispatcher dispatcher = req.getRequestDispatcher("/jsp/cart-confirmed.jsp");
+          dispatcher.forward(req, resp);
+        } else {
+          resp.sendRedirect(req.getContextPath() + "/items");
+        }
+      }
+
+    } else if (action.equals("discard")) {
+      if (currentUser != null) {
+        Cart openedCart = CartService.findOpenCartByUser(currentUser.getId());
+        CartService.deleteCart(openedCart);
+      }
+
+      resp.sendRedirect(req.getContextPath() + "/items");
     } else {
       super.doPost(req, resp);
     }

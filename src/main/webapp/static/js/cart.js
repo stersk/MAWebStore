@@ -1,8 +1,10 @@
 $( document ).ready(function() {
     $('.btn-remove-item').click(removeFromCart);
     $('.btn-edit-item').click(openEditDialog);
-    $('#itemAmount').change(onAmountChange);
-    $('#btnAmountEditCommit').click(onItemAmountCommit);
+    $('#item-amount').change(onAmountChange);
+    $('#amount-edit-commit-btn').click(onItemAmountCommit);
+    $('#confirm-btn').click(setCartConfirmOperation);
+    $('#discard-btn').click(setCartDiscardOperation);
 });
 
 function removeFromCart(event) {
@@ -28,7 +30,7 @@ function removeFromCart(event) {
 
             $(event.target).closest('tr').remove();
 
-            refillRowNumbers();
+            refillRowNumbersAndConfirmationVisibility();
             updateTotalCartSumElement(data.cartSum);
         },
         error: function (data, textStatus) {
@@ -48,11 +50,20 @@ function removeFromCart(event) {
     });
 }
 
-function refillRowNumbers() {
+function refillRowNumbersAndConfirmationVisibility() {
     var rows = $('tr');
+
+    // Element with index 0 is a header
     for (var i = 0; i < rows.length; i++){
-        // Element with index 0 is a header
-       $('th.concrete-row-number', rows.get(i)).text(i);
+        $('th.concrete-row-number', rows.get(i)).text(i);
+    }
+
+    if (rows.length == 1) { // Element with index 0 is a header
+        $('#confirm-btn').addClass('d-none');
+        $('#discard-btn').addClass('d-none');
+    } else {
+        $('#confirm-btn').removeClass('d-none');
+        $('#discard-btn').removeClass('d-none');
     }
 }
 
@@ -63,9 +74,9 @@ function openEditDialog(event) {
 
     $('#changeAmountModalLabel').text("Change amount of " + $('.item-name',rowElement).first().text().trim());
     $('#itemPrice').val($('.item-price',rowElement).first().text().trim());
-    $('#itemAmount').val($('.item-amount',rowElement).first().text().trim());
+    $('#item-amount').val($('.item-amount',rowElement).first().text().trim());
 
-    $('#itemSum').val(($('#itemPrice').val() * $('#itemAmount').val()).toFixed());
+    $('#itemSum').val(($('#itemPrice').val() * $('#item-amount').val()).toFixed());
 
     $('#changeAmountModal').modal('show');
 }
@@ -78,7 +89,7 @@ function onItemAmountCommit(event) {
     var rowElement = $('tr[data-order-id=' + $(event.target).closest('.modal').first().attr('data-order-id') + ']').first();
     var amountElement = $('.item-amount', rowElement).first();
 
-    if (amountElement.text().trim() == $('#itemAmount').val()) {
+    if (amountElement.text().trim() == $('#item-amount').val()) {
         $('#changeAmountModal').modal('hide');
         return;
     }
@@ -88,12 +99,12 @@ function onItemAmountCommit(event) {
         url: 'cart',
         dataType : "json",
         data: {orderId: rowElement.attr('data-order-id'),
-               amount: $('#itemAmount').val(),
+               amount: $('#item-amount').val(),
                action: 'updateItemAmountInOrder'},
         success: function(data, textStatus) {
             var alertText = '';
 
-            if ($('#itemAmount').val() == 0) {
+            if ($('#item-amount').val() == 0) {
                 alertText = '<div class="alert alert-success alert-dismissible fade show" role="alert">\n' +
                     'Item &quot;' + $('.item-name', rowElement).first().text() + '&quot; removed from your cart\n' +
                     '   <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
@@ -112,7 +123,7 @@ function onItemAmountCommit(event) {
                     '</div>\n';
 
                 var price = $('.item-price').first().text().trim();
-                var newAmount = $('#itemAmount').val();
+                var newAmount = $('#item-amount').val();
                 var newSum = (newAmount * price).toFixed(2);
 
                 amountElement.text(newAmount);
@@ -127,7 +138,7 @@ function onItemAmountCommit(event) {
 
             $(event.target).closest('tr').remove();
 
-            refillRowNumbers();
+            refillRowNumbersAndConfirmationVisibility();
             updateTotalCartSumElement(data.cartSum);
             $('#changeAmountModal').modal('hide');
         },
@@ -156,4 +167,12 @@ function updateTotalCartSumElement(value) {
     });
 
     $('#cart-sum').text('Total cart sum: ' + totalSum);
+}
+
+function setCartConfirmOperation(event) {
+    $('#cart-operation-action').val('confirm');
+}
+
+function setCartDiscardOperation(event) {
+    $('#cart-operation-action').val('discard');
 }
