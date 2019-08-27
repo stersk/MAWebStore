@@ -17,6 +17,7 @@
         <script type="text/javascript" src=<c:url value = "/static/js/bootstrap.min.js"/>></script>
 
         <script type="text/javascript" src=<c:url value = "/static/js/cart.js"/>></script>
+        <script type="text/javascript" src=<c:url value = "/static/js/utils.js"/>></script>
     </head>
 
     <c:set var="user" value="${user}" scope="session" />
@@ -77,8 +78,8 @@
                                     <c:set var="counter" value="${counter + 1}" scope="page" />
                                     <td class="item-name">${item.name}</td>
                                     <td class="item-amount">${order.amount}</td>
-                                    <td class="item-price">${item.price / 100}</td>
-                                    <td>${order.amount * item.price / 100}</td>
+                                    <td class="item-price"><fmt:formatNumber type="number" maxFractionDigits="2" minFractionDigits="2" value="${item.price / 100}" /></td>
+                                    <td class="item-sum"><fmt:formatNumber type="number" maxFractionDigits="2" minFractionDigits="2" value="${order.amount * item.price / 100}" /></td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-outline-secondary btn-edit-item">Edit</button>
                                         <button type="button" class="btn btn-sm btn-outline-secondary btn-remove-item">Delete</button>
@@ -125,14 +126,14 @@
                             <div class="form-row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="itemPrice" class="">Price</label>
-                                        <input type="text" class="form-control" id="itemPrice" readonly>
+                                        <label for="item-price" class="">Price</label>
+                                        <input type="text" class="form-control" id="item-price" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="itemSum" class="">Sum</label>
-                                        <input type="text" class="form-control" id="itemSum" readonly>
+                                        <label for="item-sum" class="">Sum</label>
+                                        <input type="text" class="form-control" id="item-sum" readonly>
                                     </div>
                                 </div>
                             </div>

@@ -73,16 +73,16 @@ function openEditDialog(event) {
     $('#changeAmountModal').attr('data-order-id', rowElement.attr('data-order-id'));
 
     $('#changeAmountModalLabel').text("Change amount of " + $('.item-name',rowElement).first().text().trim());
-    $('#itemPrice').val($('.item-price',rowElement).first().text().trim());
+    $('#item-price').val(parseLocalizedNumber($('.item-price',rowElement).first().text()).toFixed(2));
     $('#item-amount').val($('.item-amount',rowElement).first().text().trim());
 
-    $('#itemSum').val(($('#itemPrice').val() * $('#item-amount').val()).toFixed());
+    $('#item-sum').val(($('#item-price').val() * $('#item-amount').val()).toFixed(2));
 
     $('#changeAmountModal').modal('show');
 }
 
 function onAmountChange(event) {
-    $('#itemSum').val(($('#itemPrice').val() * $(event.target).val()).toFixed(2));
+    $('#item-sum').val(($('#item-price').val() * $(event.target).val()).toFixed(2));
 }
 
 function onItemAmountCommit(event) {
@@ -122,7 +122,7 @@ function onItemAmountCommit(event) {
                     '   </button>\n' +
                     '</div>\n';
 
-                var price = $('.item-price').first().text().trim();
+                var price = parseLocalizedNumber($('.item-price', rowElement).first().text());
                 var newAmount = $('#item-amount').val();
                 var newSum = (newAmount * price).toFixed(2);
 
@@ -160,11 +160,7 @@ function onItemAmountCommit(event) {
 }
 
 function updateTotalCartSumElement(value) {
-    var totalSum =( value / 100).toLocaleString(undefined, {
-        style: 'currency',
-        currencyDisplay: 'symbol',
-        currency: 'USD',
-    });
+    var totalSum = getLocalCurrencyRepresentation(value, true);
 
     $('#cart-sum').text('Total cart sum: ' + totalSum);
 }

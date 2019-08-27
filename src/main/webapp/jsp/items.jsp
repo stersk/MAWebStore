@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en" class="mdl-js">
     <head>
@@ -61,7 +62,7 @@
                             <img src="<c:url value = "/static/img/nophoto.jpg"/>" class="card-img-top border-bottom" width="auto" height="225"  alt="${item.name}"/>
                             <div class="card-body">
                                 <h5 class="card-text">${item.name}</h5>
-                                <p class="card-text"><b>Price: </b>${item.getPrice()}<span  class="float-right"><b>code: </b>${item.itemCode}</span></p>
+                                <p class="card-text"><b>Price: </b><fmt:formatNumber value="${item.price / 100}" currencySymbol="$" type="currency" /><span  class="float-right"><b>code: </b>${item.itemCode}</span></p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
