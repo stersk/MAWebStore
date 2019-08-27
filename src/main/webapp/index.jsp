@@ -52,6 +52,7 @@
                     });
                 });
             </script>
+            <c:remove var="wrongAuth" scope="session" />
         </c:if>
     </c:if>
 </html>
