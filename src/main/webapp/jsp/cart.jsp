@@ -12,9 +12,11 @@
 
         <link rel="stylesheet" href="<c:url value = '/static/css/bootstrap.min.css'/>">
         <link rel="stylesheet" href="<c:url value = '/static/css/cart.css'/>">
+        <link rel="stylesheet" href="<c:url value = '/static/css/animate.css'/>">
 
         <script type="text/javascript" src=<c:url value = "/static/js/jquery-3.4.1.min.js"/>></script>
         <script type="text/javascript" src=<c:url value = "/static/js/bootstrap.min.js"/>></script>
+        <script type="text/javascript" src=<c:url value = "/static/js/bootstrap-notify.min.js"/>></script>
 
         <script type="text/javascript" src=<c:url value = "/static/js/cart.js"/>></script>
         <script type="text/javascript" src=<c:url value = "/static/js/utils.js"/>></script>
@@ -57,7 +59,6 @@
         </nav>
 
         <main role="main" class="container-fluid bg-light">
-            <div id="alert-container"></div>
             <table class="table table-striped">
                 <thead class="thead-dark">
                 <tr>

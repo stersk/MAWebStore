@@ -3,10 +3,6 @@ body {
   height: 100%;
 }
 
-#alert-container {
-  margin: 15px;
-}
-
 #form-container {
   display: -ms-flexbox;
   display: -webkit-box;
@@ -19,7 +15,6 @@ body {
   justify-content: center;
   padding-top: 40px;
   padding-bottom: 40px;
-  margin-top: -15px;
   height: 100%;
 }
 

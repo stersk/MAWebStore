@@ -11,15 +11,16 @@
 
         <link href="<c:url value = '/static/css/bootstrap.min.css'/>" rel="stylesheet">
         <link href="<c:url value = '/static/css/index.css'/>" rel="stylesheet">
+        <link href="<c:url value = '/static/css/animate.css'/>" rel="stylesheet">
 
         <script type="text/javascript" src=<c:url value = "/static/js/jquery-3.4.1.min.js"/>></script>
         <script type="text/javascript" src=<c:url value = "/static/js/bootstrap.min.js"/>></script>
+        <script type="text/javascript" src=<c:url value = "/static/js/bootstrap-notify.min.js"/>></script>
     </head>
 
     <c:set var="wrongAuth" value="${wrongAuth}" scope="session" />
 
     <body class="bg-light">
-        <div id="alert-container"></div>
         <div id="form-container">
             <form class="form-login text-center" action="user" method="post">
                 <img class="mb-4" src="<c:url value = '/static/img/login.svg'/>" alt="" width="72" height="72">
@@ -42,18 +43,13 @@
         <c:if test="${wrongAuth}">
             <script type="text/javascript">
                 $(document).ready(function() {
-                    var alertText = '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
-                        'Login or password are wrong! Input correct values or Register, please!\n' +
-                        '   <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
-                        '       <span aria-hidden="true">&times;</span>\n' +
-                        '   </button>\n' +
-                        '</div>\n';
-
-                    $('#alert-container').html(alertText);
-                    $('.alert').alert();
-                    setTimeout(function () {
-                        $('.alert').alert('close');
-                    }, 5000);
+                    $.notify({
+                        // options
+                        message: 'Login or password are wrong! Input correct values or Register, please!'
+                    },{
+                        // settings
+                        type: 'danger'
+                    });
                 });
             </script>
         </c:if>

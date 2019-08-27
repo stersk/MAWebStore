@@ -1,3 +1,6 @@
+
+var notifyOffset = 71;
+
 $( document ).ready(function() {
     $('.btn-remove-item').click(removeFromCart);
     $('.btn-edit-item').click(openEditDialog);
@@ -15,37 +18,33 @@ function removeFromCart(event) {
         data: {orderId: $(event.target).closest('tr').attr('data-order-id'),
                action: 'removeFromOpenCart'},
         success: function(data, textStatus) {
-            var alertText = '<div class="alert alert-success alert-dismissible fade show" role="alert">\n' +
-            'Item &quot;' + $('.item-name', $(event.target).closest('tr')).first().text() + '&quot; removed from you cart\n' +
-            '   <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
-            '       <span aria-hidden="true">&times;</span>\n' +
-            '   </button>\n' +
-            '</div>\n';
-
-            $('#alert-container').html(alertText);
-            $('.alert').alert();
-            setTimeout(function () {
-                $('.alert').alert('close');
-            }, 5000);
-
-            $(event.target).closest('tr').remove();
+            $.notify({
+                // options
+                message: 'Item &quot;' + $('.item-name', $(event.target).closest('tr')).first().text() + '&quot; removed from you cart'
+            },{
+                // settings
+                type: 'success',
+                offset: {
+                    x: 20,
+                    y: notifyOffset
+                }
+            });
 
             refillRowNumbersAndConfirmationVisibility();
             updateTotalCartSumElement(data.cartSum);
         },
         error: function (data, textStatus) {
-            var alertText = '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
-                'Item &quot;' + $('.item-name', $(event.target).closest('tr')).first().text() + '&quot; not removed to you cart\n' +
-                '   <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
-                '       <span aria-hidden="true">&times;</span>\n' +
-                '   </button>\n' +
-                '</div>\n';
-
-            $('#alert-container').html(alertText);
-            $('.alert').alert();
-            setTimeout(function () {
-                $('.alert').alert('close');
-            }, 5000);
+            $.notify({
+                // options
+                message: 'Item &quot;' + $('.item-name', $(event.target).closest('tr')).first().text() + '&quot; not removed to you cart'
+            },{
+                // settings
+                type: 'danger',
+                offset: {
+                    x: 20,
+                    y: notifyOffset
+                }
+            });
         }
     });
 }
@@ -105,22 +104,12 @@ function onItemAmountCommit(event) {
             var alertText = '';
 
             if ($('#item-amount').val() == 0) {
-                alertText = '<div class="alert alert-success alert-dismissible fade show" role="alert">\n' +
-                    'Item &quot;' + $('.item-name', rowElement).first().text() + '&quot; removed from your cart\n' +
-                    '   <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
-                    '       <span aria-hidden="true">&times;</span>\n' +
-                    '   </button>\n' +
-                    '</div>\n';
+                alertText = 'Item &quot;' + $('.item-name', rowElement).first().text() + '&quot; removed from your cart';
 
                 rowElement.remove();
 
             } else {
-                alertText = '<div class="alert alert-success alert-dismissible fade show" role="alert">\n' +
-                    'Item &quot;' + $('.item-name', rowElement).first().text() + '&quot; amount updated\n' +
-                    '   <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
-                    '       <span aria-hidden="true">&times;</span>\n' +
-                    '   </button>\n' +
-                    '</div>\n';
+                alertText = 'Item &quot;' + $('.item-name', rowElement).first().text() + '&quot; amount updated';
 
                 var price = parseLocalizedNumber($('.item-price', rowElement).first().text());
                 var newAmount = $('#item-amount').val();
@@ -130,11 +119,17 @@ function onItemAmountCommit(event) {
                 $('.item-sum', rowElement).first().text(newSum);
             }
 
-            $('#alert-container').html(alertText);
-            $('.alert').alert();
-            setTimeout(function () {
-                $('.alert').alert('close');
-            }, 5000);
+            $.notify({
+                // options
+                message: alertText
+            },{
+                // settings
+                type: 'success',
+                offset: {
+                    x: 20,
+                    y: notifyOffset
+                }
+            });
 
             $(event.target).closest('tr').remove();
 
@@ -143,18 +138,17 @@ function onItemAmountCommit(event) {
             $('#changeAmountModal').modal('hide');
         },
         error: function (data, textStatus) {
-            var alertText = '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
-                'Item &quot;' + $('.item-name', rowElement).first().text() + '&quot; amount not changed\n' +
-                '   <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
-                '       <span aria-hidden="true">&times;</span>\n' +
-                '   </button>\n' +
-                '</div>\n';
-
-            $('#alert-container').html(alertText);
-            $('.alert').alert();
-            setTimeout(function () {
-                $('.alert').alert('close');
-            }, 5000);
+            $.notify({
+                // options
+                message: 'Item &quot;' + $('.item-name', rowElement).first().text() + '&quot; amount not changed'
+            },{
+                // settings
+                type: 'success',
+                offset: {
+                    x: 20,
+                    y: notifyOffset
+                }
+            });
         }
     });
 }
