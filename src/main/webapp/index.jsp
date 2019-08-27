@@ -16,7 +16,7 @@
         <script type="text/javascript" src=<c:url value = "/static/js/bootstrap.min.js"/>></script>
     </head>
 
-    <c:set var="wrongAuth" value="${wrongAuth}" scope="request" />
+    <c:set var="wrongAuth" value="${wrongAuth}" scope="session" />
 
     <body class="bg-light">
         <div id="alert-container"></div>
@@ -51,9 +51,9 @@
 
                     $('#alert-container').html(alertText);
                     $('.alert').alert();
-/*                    setTimeout(function () {
+                    setTimeout(function () {
                         $('.alert').alert('close');
-                    }, 5000);*/
+                    }, 5000);
                 });
             </script>
         </c:if>
