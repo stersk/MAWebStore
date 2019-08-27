@@ -11,22 +11,51 @@
 
         <link href="<c:url value = '/static/css/bootstrap.min.css'/>" rel="stylesheet">
         <link href="<c:url value = '/static/css/index.css'/>" rel="stylesheet">
+
+        <script type="text/javascript" src=<c:url value = "/static/js/jquery-3.4.1.min.js"/>></script>
+        <script type="text/javascript" src=<c:url value = "/static/js/bootstrap.min.js"/>></script>
     </head>
 
-    <body class="text-center">
-        <form class="form-login" action="user" method="post">
-            <img class="mb-4" src="<c:url value = '/static/img/login.svg'/>" alt="" width="72" height="72">
-            <h1 class="h3 mb-3 font-weight-normal">Please, log in</h1>
-            <input type="text" name="action" value="login" hidden>
-            <label for="inputlogin" class="sr-only">Email address</label>
-            <input type="text" name="login" id="inputlogin" class="form-control" placeholder="Input login" required autofocus>
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Input password" required>
-            <button class="btn btn-lg btn-dark btn-block" type="submit">Log in</button>
-            <p>
-                <a href="<c:url value = '/jsp/registration.jsp'/>">Register</a>
-            </p>
-            <p class="mt-5 mb-3 text-muted">&copy; 2019 Sters</p>
-        </form>
+    <c:set var="wrongAuth" value="${wrongAuth}" scope="request" />
+
+    <body class="bg-light">
+        <div id="alert-container"></div>
+        <div id="form-container">
+            <form class="form-login text-center" action="user" method="post">
+                <img class="mb-4" src="<c:url value = '/static/img/login.svg'/>" alt="" width="72" height="72">
+                <h1 class="h3 mb-3 font-weight-normal">Please, log in</h1>
+                <input type="text" name="action" value="login" hidden>
+                <label for="inputlogin" class="sr-only">Email address</label>
+                <input type="text" name="login" id="inputlogin" class="form-control" placeholder="Input login" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Input password" required>
+                <button class="btn btn-lg btn-dark btn-block" type="submit">Log in</button>
+                <p>
+                    <a href="<c:url value = '/jsp/registration.jsp'/>">Register</a>
+                </p>
+                <p class="mt-5 mb-3 text-muted">&copy; 2019 Sters</p>
+            </form>
+        </div>
     </body>
+
+    <c:if test="${not empty wrongAuth}">
+        <c:if test="${wrongAuth}">
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    var alertText = '<div class="alert alert-danger alert-dismissible fade show" role="alert">\n' +
+                        'Login or password are wrong! Input correct values or Register, please!\n' +
+                        '   <button type="button" class="close" data-dismiss="alert" aria-label="Close">\n' +
+                        '       <span aria-hidden="true">&times;</span>\n' +
+                        '   </button>\n' +
+                        '</div>\n';
+
+                    $('#alert-container').html(alertText);
+                    $('.alert').alert();
+/*                    setTimeout(function () {
+                        $('.alert').alert('close');
+                    }, 5000);*/
+                });
+            </script>
+        </c:if>
+    </c:if>
 </html>
