@@ -23,6 +23,7 @@
 
     <c:set var="user" value="${user}" scope="session" />
     <c:set var="items" value="${items}" scope="request" />
+    <c:set var="discartCompleted" value="${discartCompleted}" scope="session" />
 
     <body class="bg-light">
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -80,4 +81,25 @@
             </div>
         </main>
     </body>
+
+    <c:if test="${not empty discartCompleted}">
+        <c:if test="${discartCompleted}">
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $.notify({
+                        // options
+                        message: 'You cart cleared successfully'
+                    },{
+                        // settings
+                        type: 'success',
+                        offset: {
+                            x: 20,
+                            y: notifyOffset
+                        }
+                    });
+                });
+            </script>
+            <c:remove var="discartCompleted" scope="session" />
+        </c:if>
+    </c:if>
 </html>
