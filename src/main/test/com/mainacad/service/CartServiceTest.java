@@ -15,8 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CartServiceTest {
   private static List<User> users = new ArrayList<>();
@@ -77,5 +76,42 @@ class CartServiceTest {
     Integer checkedSum = CartService.getCartSum(carts.get(0));
     assertNotNull(checkedSum);
     assertEquals(60000, checkedSum);
+  }
+
+  @Test
+  void testDeleteCart() {
+    Cart createdCart = CartService.createCartForUser(users.get(0).getId());
+    carts.add(createdCart);
+
+    Order createdOrder = OrderService.addItemToOrder(items.get(0), users.get(0));
+    orders.add(createdOrder);
+
+    CartService.deleteCart(createdCart);
+
+    Order checkedOrder = OrderService.findById(createdOrder.getId());
+    assertNull(checkedOrder);
+
+    Cart checkedCart = CartService.findById(createdCart.getId());
+    assertNull(checkedCart);
+  }
+
+  @Test
+  void testGetOrdersFromOpenCartByUser() {
+    Cart createdCart = CartService.createCartForUser(users.get(0).getId());
+    carts.add(createdCart);
+
+    Order createdOrder = OrderService.addItemToOrder(items.get(0), users.get(0));
+    orders.add(createdOrder);
+
+    List<Order> checkedOrders = CartService.getOrdersFromOpenCartByUser(users.get(0).getId());
+    assertNotNull(checkedOrders);
+    assertEquals(1, checkedOrders.size());
+    assertEquals(createdOrder.getId(), checkedOrders.get(0).getId());
+
+    CartService.close(createdCart.getId());
+    checkedOrders = CartService.getOrdersFromOpenCartByUser(users.get(0).getId());
+
+    assertNotNull(checkedOrders);
+    assertEquals(0, checkedOrders.size());
   }
 }

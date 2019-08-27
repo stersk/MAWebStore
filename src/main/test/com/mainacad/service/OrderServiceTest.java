@@ -75,4 +75,20 @@ class OrderServiceTest {
     assertEquals(users.get(0).getId(), checkedCart.getUserId());
     assertEquals(false, checkedCart.getClosed());
   }
+
+  @Test
+  void testAddItemToOrder() {
+    Order createdOrder = OrderService.addItemToOrder(items.get(0),users.get(0));
+    orders.add(createdOrder);
+
+    assertNotNull(createdOrder);
+
+    Order checkedOrder = OrderService.findById(createdOrder.getId());
+    assertEquals(1, checkedOrder.getAmount());
+
+    createdOrder = OrderService.addItemToOrder(items.get(0),users.get(0));
+
+    checkedOrder = OrderService.findById(createdOrder.getId());
+    assertEquals(2, checkedOrder.getAmount());
+  }
 }

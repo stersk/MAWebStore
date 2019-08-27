@@ -23,7 +23,6 @@ public class OrderService {
         return OrderDAO.create(order);
     }
 
-    //    TODO Tests
     public static Order addItemToOrder(Item item, User user){
         Order existingOrder = CartService.getOrdersFromOpenCartByUser(user.getId()).stream().filter(order -> order.getItemId().equals(item.getId())).findAny().orElse(null);
         if (existingOrder == null) {
@@ -44,7 +43,6 @@ public class OrderService {
         return OrderDAO.findById(id);
     }
 
-//    TODO Check and delete unused function
     public static List<Order> findClosedOrdersByUserAndPeriod(User user, Long from, Long to){
         return OrderDAO.findClosedOrdersByUserIdAndPeriod(user.getId(), from, to);
     }

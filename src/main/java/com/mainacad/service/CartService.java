@@ -42,7 +42,6 @@ public class CartService {
         return CartDAO.getCartSum(cart.getId());
     }
 
-    // TODO Tests
     public static void deleteCart(Cart cart) {
         List<Order> cartOrders = OrderDAO.findByCart(cart.getId());
 
@@ -50,7 +49,6 @@ public class CartService {
         CartDAO.delete(cart.getId());
     }
 
-    // TODO Tests
     public static List<Order> getOrdersFromOpenCartByUser(Integer userId) {
         List<Order> orders = new ArrayList<>();
 
