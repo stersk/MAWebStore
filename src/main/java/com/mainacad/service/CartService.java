@@ -12,11 +12,18 @@ import java.util.List;
 public class CartService {
 
     public static Cart createCartForUser(Integer userId){
-        Cart cart = new Cart();
-        cart.setCreationTime(new Date().getTime());
-        cart.setClosed(Boolean.FALSE);
-        cart.setUserId(userId);
-        return CartDAO.create(cart);
+        Cart createdCart = findOpenCartByUser(userId);
+
+        if (createdCart == null) {
+            createdCart = new Cart();
+            createdCart.setCreationTime(new Date().getTime());
+            createdCart.setClosed(Boolean.FALSE);
+            createdCart.setUserId(userId);
+
+            createdCart = CartDAO.create(createdCart);
+        }
+
+        return createdCart;
     }
 
     public static Cart findById(Integer id) {
