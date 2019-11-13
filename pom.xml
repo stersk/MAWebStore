@@ -21,7 +21,7 @@
     <postgresql.jdbc.version>42.2.6</postgresql.jdbc.version>
     <servlet.version>4.0.1</servlet.version>
     <commons-dbcp.version>1.4</commons-dbcp.version>
-    <jackson.version>2.9.9</jackson.version>
+    <jackson.version>2.10.1</jackson.version>
     <servlet-api.version>2.3.3</servlet-api.version>
     <jstl.version>1.2</jstl.version>
   </properties>
